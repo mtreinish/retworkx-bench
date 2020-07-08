@@ -33,8 +33,10 @@ class PathFunctionBenchmarks:
             self.graph.add_edge(src, target, i)
         if hasattr(retworkx, 'dag_all_simple_paths'):
             self.all_simple_paths_func = retworkx.dag_all_simple_paths
-        else:
+        elif hasattr(retworkx, 'digraph_all_simple_paths'):
             self.all_simple_paths_func = retworkx.digraph_all_simple_paths
+        else:
+            self.all_simple_paths_func = None
 
     def time_dag_longest_path(self, _, __):
         retworkx.dag_longest_path(self.graph)
