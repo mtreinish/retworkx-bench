@@ -27,8 +27,7 @@ class LayersBenchmarks:
         node_ids = itertools.cycle(nodes)
         list_obj = []
         for i in range(num_edges):
-            list_obj.append((next(node_ids), next(node_ids), i))
-        self.graph.add_edges_from(list_obj)
+            self.graph.add_edge(next(node_ids), next(node_ids), i)
 
     def time_layers(self, _, __):
         retworkx.layers(self.graph, [0])
