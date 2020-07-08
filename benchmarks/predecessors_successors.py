@@ -24,8 +24,7 @@ class PredecessorsSuccessorBenchmarks:
         node_ids = itertools.cycle(self.nodes)
         list_obj = []
         for i in range(num_edges):
-            list_obj.append((next(node_ids), next(node_ids), i))
-        self.graph.add_edges_from(list_obj)
+            self.graph.add_edge(next(node_ids), next(node_ids), i)
         if num_edges <= num_nodes:
             self.end_edge_index = num_edges - 1
         else:
