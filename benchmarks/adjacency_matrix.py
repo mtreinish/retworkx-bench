@@ -42,6 +42,10 @@ class DiGraphAdjacencyMatrixBenchmarks:
     param_names = ['Number of Nodes', 'Number of Edges', 'Removed Nodes']
 
     def setup(self, num_nodes, num_edges, remove_nodes):
+        if hasattr(retworkx, 'dag_adjacency_matrix'):
+            self.graph_func = retworkx.dag_adjacency_matrix
+        else:
+            self.graph_func = retworkx.digraph_adjacency_matrix
         random.seed(4242)
         self.graph = retworkx.PyDAG()
         nodes = []
@@ -61,7 +65,7 @@ class DiGraphAdjacencyMatrixBenchmarks:
             self.graph.add_edge(src, target, i)
 
     def time_adjacency_matrix(self, _, __, ___):
-        retworkx.digraph_adjacency_matrix(self.graph, lambda x: x)
+        self.graph_func(self.graph, lambda x: x)
 
     def peakmem_adjacency_matrix(self, _, __, ___):
-        retworkx.digraph_adjacency_matrix(self.graph, lambda x: x)
+        self.graph_func(self.graph, lambda x: x)

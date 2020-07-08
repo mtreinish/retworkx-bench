@@ -31,7 +31,10 @@ class TopologicalSortBenchmarks:
             src = next(node_ids)
             target = next(node_ids)
             self.graph.add_edge(src, target, i)
-        self.astar_start = int(math.log10(num_nodes))
+        if hasattr(retworkx, 'dag_all_simple_paths'):
+            self.all_simple_paths_func = retworkx.dag_all_simple_paths
+        else:
+            self.all_simple_paths_func = retworkx.digraph_all_simple_paths
 
     def time_dag_longest_path(self, _, __):
         retworkx.dag_longest_path(self.graph)
@@ -40,7 +43,7 @@ class TopologicalSortBenchmarks:
         retworkx.dag_longest_path_length(self.graph)
 
     def time_all_simple_paths(self, num_nodes, __):
-        retworkx.digraph_all_simple_paths(self.graph, 1, num_nodes - 2)
+        self.all_simple_paths_func(self.graph, 1, num_nodes - 2)
 
 class TestAstar:
     params = ([10],
@@ -48,6 +51,10 @@ class TestAstar:
     param_names = ['Number of Nodes', 'Number of Edges']
 
     def setup(self, num_nodes, num_edges):
+        if hasattr(retworkx, 'dag_astar_shortest_path'):
+            self.astar_func = retworkx.dag_astar_shortest_path
+        else:
+            self.astar_func = retworkx.digraph_astar_shortest_path
         random.seed(42)
         self.graph = retworkx.PyDAG()
         nodes = []
@@ -66,6 +73,6 @@ class TestAstar:
         def match_goal(x):
             return x == 1
 
-        retworkx.digraph_astar_shortest_path(
+        self.astar_func(
                 self.graph, 0, match_goal, lambda x: x,
                 lambda x: 1)
