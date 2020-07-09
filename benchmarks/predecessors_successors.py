@@ -12,6 +12,7 @@ import retworkx
 
 from .gr_parser import parse_gr_from_file
 
+
 class PredecessorsSuccessorBenchmarks:
 
     params = ([10, 100, 1000, 10000, 100000, 1000000],
@@ -24,7 +25,6 @@ class PredecessorsSuccessorBenchmarks:
         for i in range(num_nodes):
             self.nodes.append(self.graph.add_node(i))
         node_ids = itertools.cycle(self.nodes)
-        list_obj = []
         for i in range(num_edges):
             self.graph.add_edge(next(node_ids), next(node_ids), i)
         if num_edges <= num_nodes:

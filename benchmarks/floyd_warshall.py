@@ -26,7 +26,6 @@ class FloydWarshall:
             nodes.append(self.graph.add_node(i))
         random.shuffle(nodes)
         node_ids = itertools.cycle(nodes)
-        list_obj = []
         for i in range(num_edges):
             src = next(node_ids)
             target = next(node_ids)

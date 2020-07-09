@@ -11,6 +11,7 @@ import itertools
 
 import retworkx
 
+
 class LayersBenchmarks:
 
     params = ([10, 100, 1000, 10000, 100000, 1000000],
@@ -25,7 +26,6 @@ class LayersBenchmarks:
             nodes.append(self.graph.add_node(i))
         random.shuffle(nodes)
         node_ids = itertools.cycle(nodes)
-        list_obj = []
         for i in range(num_edges):
             self.graph.add_edge(next(node_ids), next(node_ids), i)
 

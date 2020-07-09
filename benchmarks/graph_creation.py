@@ -10,6 +10,7 @@
 
 import retworkx
 
+
 class RetworkxGraphCreation:
     def time_graph_creation(self):
         retworkx.PyGraph()

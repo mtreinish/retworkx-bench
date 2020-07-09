@@ -11,6 +11,7 @@ import itertools
 
 import retworkx
 
+
 class GraphAdjacencyMatrixBenchmarks:
 
     params = ([10, 100, 1000, 10000, 100000],
@@ -33,6 +34,7 @@ class GraphAdjacencyMatrixBenchmarks:
 
     def peakmem_adjacency_matrix(self, _, __):
         retworkx.graph_adjacency_matrix(self.graph, lambda x: x)
+
 
 class DiGraphAdjacencyMatrixBenchmarks:
 
@@ -58,7 +60,6 @@ class DiGraphAdjacencyMatrixBenchmarks:
             self.graph.remove_node(removed_node)
             nodes.remove(removed_node)
         node_ids = itertools.cycle(nodes)
-        list_obj = []
         for i in range(num_edges):
             src = next(node_ids)
             target = next(node_ids)

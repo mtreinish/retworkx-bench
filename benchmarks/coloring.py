@@ -11,6 +11,7 @@ import itertools
 
 import retworkx
 
+
 class ColoringBenchmarks:
 
     params = ([1, 10, 100, 1000, 10000, 100000, 1000000],
