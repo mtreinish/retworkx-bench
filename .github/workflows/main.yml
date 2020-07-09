@@ -1,0 +1,44 @@
+name: test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    name: "Run benchmarks and python formatting"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          default: true
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -e
+          set -x
+          python -m pip install -U pip
+          python -m pip install -U wheel setuptools virtualenv
+          pip install flake8
+          # Clone from asv master to get --strict flag until it is released
+          pip install git+https://github.com/airspeed-velocity/asv
+      - name: Python formatting
+        shell: bash
+        run: |
+          flake8 benchmarks
+      - name: Test Benchmarks
+        shell: bash
+        run: |
+          set -e
+          set -x
+          asv machine --yes
+          asv run --quick --show-stderr --strict --bench  '^((?!(matrix.*100000|from.*1000000)).)*'
