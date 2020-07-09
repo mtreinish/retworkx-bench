@@ -6,7 +6,11 @@
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
 
+import os
+
 import retworkx
+
+from .gr_parser import parse_gr_from_file
 
 
 class NodeCreation:
@@ -68,3 +72,28 @@ class DiGraphNodeAddition:
     def time_add_loop(self, _, __):
         for i in self.list_obj:
             self.full_graph.add_node(i)
+
+
+class USANYCRoadGraph:
+    params = ([True, False])
+    param_names = ["Directed Graph"]
+
+    def setup(self, directed):
+        gr_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               'graphs', "USA-road-d.NY.gr")
+        self.graph = parse_gr_from_file(gr_file, directed=directed)
+
+    def time___len__(self, _):
+        len(self.graph)
+
+    def time_remove_node(self, _):
+        self.graph.remove_node(425)
+
+    def time_nodes(self, _):
+        self.graph.nodes()
+
+    def time_nodes_indexes(self, _):
+        self.graph.node_indexes()
+
+    def time_get_node_data(self, _):
+        self.graph.get_node_data(5210)
