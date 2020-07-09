@@ -6,10 +6,13 @@
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
 
-import random
 import itertools
+import os
+import random
 
 import retworkx
+
+from .gr_parser import parse_gr_from_file
 
 
 class ColoringBenchmarks:
@@ -30,4 +33,17 @@ class ColoringBenchmarks:
         self.graph.add_edges_from(list_obj)
 
     def time_graph_greedy_coloring(self, _, __):
+        retworkx.graph_greedy_color(self.graph)
+
+
+class ColoringRoadMapNYC:
+    def setup(self):
+        gr_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               'graphs', "USA-road-d.NY.gr")
+        self.graph = parse_gr_from_file(gr_file, directed=False)
+
+    def time_graph_greedy_coloring(self):
+        retworkx.graph_greedy_color(self.graph)
+
+    def peakmem_graph_greedy_coloring(self):
         retworkx.graph_greedy_color(self.graph)
