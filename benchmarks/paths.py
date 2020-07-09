@@ -7,10 +7,13 @@
 # that they have been altered from the originals.
 
 import math
+import os
 import random
 import itertools
 
 import retworkx
+
+from .gr_parser import parse_gr_from_file
 
 class PathFunctionBenchmarks:
 
@@ -78,3 +81,40 @@ class TestAstar:
         self.astar_func(
                 self.graph, 0, match_goal, lambda x: x,
                 lambda x: 1)
+
+
+class PathsUSANYCRoadGraph:
+    params = ([True, False])
+    param_names = ["Directed Graph"]
+
+    def setup(self, directed):
+        gr_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               'graphs', "USA-road-d.NY.gr")
+        self.graph = parse_gr_from_file(gr_file, directed=directed)
+        if directed:
+            if hasattr(retworkx, 'dag_all_simple_paths'):
+                self.all_simple_paths_func = retworkx.dag_all_simple_paths
+                self.astar_func = retworkx.dag_astar_shortest_path
+            elif hasattr(retworkx, 'digraph_all_simple_paths'):
+                self.all_simple_paths_func = retworkx.digraph_all_simple_paths
+                self.astar_func = retworkx.digraph_astar_shortest_path
+            else:
+                raise NotImplementedError
+        else:
+            if hasattr(retworkx, 'graph_all_simple_paths'):
+                self.all_simple_paths_func = retworkx.graph_all_simple_paths
+                self.astar_func = retworkx.graph_astar_shortest_path
+            else:
+                raise NotImplementedError
+
+    def time_all_simple_paths(self, _):
+        # NOTE: this doesn't really traverse the graph, a full traversal is
+        # too slow (for now) for a graph this large and takes over 10mins
+        self.all_simple_paths_func(self.graph, 1, 0)
+
+    def time_astar_shortest_path(self, _):
+        def match_goal(x):
+            return x == 5123
+
+        self.astar_func(self.graph, 0, match_goal, lambda x: int(x),
+                        lambda x: 1)
