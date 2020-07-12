@@ -13,27 +13,36 @@ import retworkx
 from .gr_parser import parse_gr_from_file
 
 
-class NodeCreation:
+class GraphNodeCreation:
 
     params = ([1, 10, 100, 1000, 10000, 100000, 1000000, 100000000])
     param_names = ['Number of Nodes']
 
     def setup(self, num_nodes):
         self.empty_graph = retworkx.PyGraph()
-        self.empty_digraph = retworkx.PyDAG()
         self.list_objs = list(range(num_nodes))
 
     def time_graph_add_nodes_from(self, _):
         self.empty_graph.add_nodes_from(self.list_objs)
 
-    def time_graph_add_nodes_loop(self, num_nodes):
+    def time_graph_add_nodes_loop(self, _):
         for i in self.list_objs:
             self.empty_graph.add_node(i)
 
-    def time_digraph_add_node_from(self, _):
+class DiGraphNodeCreation:
+
+    params = ([1, 10, 100, 1000, 10000, 100000, 1000000, 100000000],
+              [False, True])
+    param_names = ['Number of Nodes', 'Cycle Check']
+
+    def setup(self, num_nodes, cycle_check):
+        self.empty_digraph = retworkx.PyDAG(cycle_check)
+        self.list_objs = list(range(num_nodes))
+
+    def time_digraph_add_node_from(self, _, __):
         self.empty_digraph.add_nodes_from(self.list_objs)
 
-    def time_digraph_add_nodes_loop(self, num_nodes):
+    def time_digraph_add_nodes_loop(self, _, __):
         for i in self.list_objs:
             self.empty_digraph.add_node(i)
 
@@ -88,6 +97,9 @@ class USANYCRoadGraph:
 
     def time_remove_node(self, _):
         self.graph.remove_node(425)
+
+    def time_remove_nodes_from(self, _):
+        self.graph.remove_nodes_from([425, 525, 625, 725, 825])
 
     def time_nodes(self, _):
         self.graph.nodes()
