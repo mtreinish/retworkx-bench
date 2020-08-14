@@ -13,6 +13,7 @@ import itertools
 import retworkx
 
 from .gr_parser import parse_gr_from_file
+from .metis_parser import parse_metis_from_file
 
 
 class PathFunctionBenchmarks:

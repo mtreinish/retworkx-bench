@@ -11,6 +11,7 @@ import os
 import retworkx
 
 from .gr_parser import parse_gr_from_file
+from .metis_parser import parse_metis_from_file
 
 
 class GraphNodeCreation:
@@ -108,4 +109,30 @@ class USANYCRoadGraph:
         self.graph.node_indexes()
 
     def time_get_node_data(self, _):
+        self.graph.get_node_data(5210)
+
+
+class AsiaRoadGraph:
+
+    def setup(self):
+        metis_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               'graphs', "asia.osm.graph.bz2")
+        self.graph = parse_metis_from_file(metis_file)
+
+    def time___len__(self):
+        len(self.graph)
+
+    def time_remove_node(self):
+        self.graph.remove_node(425)
+
+    def time_remove_nodes_from(self):
+        self.graph.remove_nodes_from([425, 525, 625, 725, 825])
+
+    def time_nodes(self):
+        self.graph.nodes()
+
+    def time_nodes_indexes(self):
+        self.graph.node_indexes()
+
+    def time_get_node_data(self):
         self.graph.get_node_data(5210)
