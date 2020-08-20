@@ -50,6 +50,9 @@ class PredecessorsSuccessorBenchmarks:
     def time_number_weakly_connected_components(self, _, __):
         retworkx.number_weakly_connected_components(self.graph)
 
+    def time_strongly_connected_components(self, _, __):
+        retworkx.strongly_connected_components(self.graph)
+
 
 class PredecessorsSuccessorsUSANYCRoadGraph:
 
@@ -75,3 +78,6 @@ class PredecessorsSuccessorsUSANYCRoadGraph:
 
     def time_number_weakly_connected_components(self):
         retworkx.number_weakly_connected_components(self.graph)
+
+    def time_strongly_connected_components(self):
+        retworkx.strongly_connected_components(self.graph)
