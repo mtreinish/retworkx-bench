@@ -46,8 +46,12 @@ def parse_metis_from_file(path):
     node_index = 0
     weight = 0
     ncon = 0
+    count = 0
     with bz2.open(path, 'rt') as fd:
         for line in fd:
+            line = line.rstrip()
+            if not line:
+                continue
             if line.startswith('%'):
                 continue
             if not props_set:
@@ -99,6 +103,7 @@ def parse_metis_from_file(path):
                             weight = int(w)
                             return_graph.add_edge(node_index, vertex, weight)
                     else:
+
                         for v in raw_components:
                             vertex = int(v) - 1
                             return_graph.add_edge(node_index, vertex, None)

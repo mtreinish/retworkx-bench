@@ -30,6 +30,7 @@ class GraphNodeCreation:
         for i in self.list_objs:
             self.empty_graph.add_node(i)
 
+
 class DiGraphNodeCreation:
 
     params = ([1, 10, 100, 1000, 10000, 100000, 1000000, 100000000],
@@ -116,7 +117,59 @@ class AsiaRoadGraph:
 
     def setup(self):
         metis_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'graphs', "asia.osm.graph.bz2")
+                                  'graphs', "asia.osm.graph.bz2")
+        self.graph = parse_metis_from_file(metis_file)
+
+    def time___len__(self):
+        len(self.graph)
+
+    def time_remove_node(self):
+        self.graph.remove_node(425)
+
+    def time_remove_nodes_from(self):
+        self.graph.remove_nodes_from([425, 525, 625, 725, 825])
+
+    def time_nodes(self):
+        self.graph.nodes()
+
+    def time_nodes_indexes(self):
+        self.graph.node_indexes()
+
+    def time_get_node_data(self):
+        self.graph.get_node_data(5210)
+
+
+class RandomGeometricGraph:
+
+    def setup(self):
+        metis_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                  'graphs', "rgg_n_2_22_s0.graph.bz2")
+        self.graph = parse_metis_from_file(metis_file)
+
+    def time___len__(self):
+        len(self.graph)
+
+    def time_remove_node(self):
+        self.graph.remove_node(425)
+
+    def time_remove_nodes_from(self):
+        self.graph.remove_nodes_from([425, 525, 625, 725, 825])
+
+    def time_nodes(self):
+        self.graph.nodes()
+
+    def time_nodes_indexes(self):
+        self.graph.node_indexes()
+
+    def time_get_node_data(self):
+        self.graph.get_node_data(5210)
+
+
+class TwoDimensionDynamicSimulation:
+
+    def setup(self):
+        metis_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                  'graphs', "hugetric-00020.graph.bz2")
         self.graph = parse_metis_from_file(metis_file)
 
     def time___len__(self):

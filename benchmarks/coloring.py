@@ -49,12 +49,43 @@ class ColoringRoadMapNYC:
     def peakmem_graph_greedy_coloring(self):
         retworkx.graph_greedy_color(self.graph)
 
+
 class ColoringRoadMapAsia:
     timeout = 120.0
 
     def setup(self):
         metis_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'graphs', "asia.osm.graph.bz2")
+                                  'graphs', "asia.osm.graph.bz2")
+        self.graph = parse_metis_from_file(metis_file)
+
+    def time_graph_greedy_coloring(self):
+        retworkx.graph_greedy_color(self.graph)
+
+    def peakmem_graph_greedy_coloring(self):
+        retworkx.graph_greedy_color(self.graph)
+
+
+class RandomGeometricGraph:
+    timeout = 120.0
+
+    def setup(self):
+        metis_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                  'graphs', "rgg_n_2_22_s0.graph.bz2")
+        self.graph = parse_metis_from_file(metis_file)
+
+    def time_graph_greedy_coloring(self):
+        retworkx.graph_greedy_color(self.graph)
+
+    def peakmem_graph_greedy_coloring(self):
+        retworkx.graph_greedy_color(self.graph)
+
+
+class TwoDimensionalDynamicSimulation:
+    timeout = 120.0
+
+    def setup(self):
+        metis_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                  'graphs', "hugetric-00020.graph.bz2")
         self.graph = parse_metis_from_file(metis_file)
 
     def time_graph_greedy_coloring(self):
