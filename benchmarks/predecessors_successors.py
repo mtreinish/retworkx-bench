@@ -110,3 +110,33 @@ class PredecessorsSuccessorsRoadGraphWesternUSA:
 
     def time_strongly_connected_components(self):
         retworkx.strongly_connected_components(self.graph)
+
+
+class PredecessorsSuccessorsRoadGraphFullUSA:
+    timeout = 600
+
+    def setup(self):
+        gr_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               'graphs', "USA-road-t.USA.gr.gz")
+        self.graph = parse_gr_from_file(gr_file, directed=True)
+
+    def time_bfs_successors(self):
+        retworkx.bfs_successors(self.graph, 10240)
+
+    def time_successors(self):
+        self.graph.successors(10240)
+
+    def time_predecessors(self):
+        self.graph.predecessors(10240)
+
+    def time_ancestors(self):
+        retworkx.ancestors(self.graph, 10240)
+
+    def time_descendants(self):
+        retworkx.descendants(self.graph, 10240)
+
+    def time_number_weakly_connected_components(self):
+        retworkx.number_weakly_connected_components(self.graph)
+
+    def time_strongly_connected_components(self):
+        retworkx.strongly_connected_components(self.graph)

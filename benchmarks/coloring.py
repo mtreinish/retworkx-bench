@@ -37,6 +37,21 @@ class ColoringBenchmarks:
         retworkx.graph_greedy_color(self.graph)
 
 
+class ColoringRoadMapFullUSA:
+    timeout = 600
+
+    def setup(self):
+        gr_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               'graphs', "USA-road-t.USA.gr.gz")
+        self.graph = parse_gr_from_file(gr_file, directed=False)
+
+    def time_graph_greedy_coloring(self):
+        retworkx.graph_greedy_color(self.graph)
+
+    def peakmem_graph_greedy_coloring(self):
+        retworkx.graph_greedy_color(self.graph)
+
+
 class ColoringRoadMapWesternUSA:
     def setup(self):
         gr_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
