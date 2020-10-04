@@ -46,7 +46,6 @@ def parse_metis_from_file(path):
     node_index = 0
     weight = 0
     ncon = 0
-    count = 0
     with bz2.open(path, 'rt') as fd:
         for line in fd:
             line = line.rstrip()
