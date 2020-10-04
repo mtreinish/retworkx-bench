@@ -6,6 +6,8 @@
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
 
+import gzip
+
 import retworkx
 
 """Parser for graph specification files from the 9th DIMACS challenge
@@ -35,7 +37,11 @@ def parse_gr_from_file(path, directed=False):
         return_graph = retworkx.PyDAG()
 
     nodes_added = False
-    with open(path, 'r') as fd:
+    if path.endswith('gz'):
+        open_call = gzip.open
+    else:
+        open_call = open
+    with open_call(path, 'rt') as fd:
         for line in fd:
             if line.startswith('c'):
                 continue

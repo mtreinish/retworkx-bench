@@ -26,7 +26,8 @@
     "build_command": [
         "python -m pip install setuptools-rust",
         "python setup.py build",
-        "PIP_NO_BUILD_ISOLATION=false python -mpip wheel --no-deps --no-index -w {build_cache_dir} {build_dir}"
+        "PIP_NO_BUILD_ISOLATION=false python -mpip wheel --no-deps --no-index -w {build_cache_dir} {build_dir}",
+        "python -m pip install qiskit-terra==0.15.1"
     ],
 
     // List of branches to benchmark. If not provided, defaults to "master"
