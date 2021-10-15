@@ -13,9 +13,11 @@ import retworkx
 
 class GraphAddEdgesBenchmarks:
 
-    params = ([1, 10, 100, 1000, 10000, 100000, 1000000],
-              [1, 10, 100, 1000, 10000, 100000, 1000000])
-    param_names = ['Number of Nodes', 'Number of Edges']
+    params = (
+        [1, 10, 100, 1000, 10000, 100000, 1000000],
+        [1, 10, 100, 1000, 10000, 100000, 1000000],
+    )
+    param_names = ["Number of Nodes", "Number of Edges"]
 
     def setup(self, num_nodes, num_edges):
         self.graph = retworkx.PyGraph()
@@ -42,10 +44,12 @@ class GraphAddEdgesBenchmarks:
 
 class DiGraphAddEdgesBenchmarks:
 
-    params = ([1, 10, 100, 1000, 10000, 100000, 1000000],
-              [1, 10, 100, 1000, 10000, 100000, 1000000],
-              [False, True])
-    param_names = ['Number of Nodes', 'Number of Edges', 'Cycle Check']
+    params = (
+        [1, 10, 100, 1000, 10000, 100000, 1000000],
+        [1, 10, 100, 1000, 10000, 100000, 1000000],
+        [False, True],
+    )
+    param_names = ["Number of Nodes", "Number of Edges", "Cycle Check"]
 
     def setup(self, num_nodes, num_edges, cycle_check):
         self.graph = retworkx.PyDAG(cycle_check)

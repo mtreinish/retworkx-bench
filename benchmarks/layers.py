@@ -6,31 +6,22 @@
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
 
-import random
-import itertools
+import math
 
 import retworkx
 
 
 class LayersBenchmarks:
 
-    params = ([10, 100, 1000, 10000, 100000, 1000000],
-              [10, 100, 1000, 10000, 100000, 1000000])
-    param_names = ['Number of Nodes', 'Number of Edges']
+    params = [19, 57, 115, 193, 291, 409, 547, 705, 883, 1081, 1299]
+    param_names = ["Number of Nodes"]
 
-    def setup(self, num_nodes, num_edges):
-        random.seed(42)
-        self.graph = retworkx.PyDAG()
-        nodes = []
-        for i in range(num_nodes):
-            nodes.append(self.graph.add_node(i))
-        random.shuffle(nodes)
-        node_ids = itertools.cycle(nodes)
-        for i in range(num_edges):
-            self.graph.add_edge(next(node_ids), next(node_ids), i)
+    def setup(self, num_nodes):
+        d = math.ceil((math.sqrt((10 * num_nodes) + 6)) / 5)
+        self.graph = retworkx.generators.directed_heavy_hex_graph(d)
 
-    def time_layers(self, _, __):
+    def time_layers(self, _):
         retworkx.layers(self.graph, [0])
 
-    def peakmem_layers(self, _, __):
+    def peakmem_layers(self, _):
         retworkx.layers(self.graph, [0])

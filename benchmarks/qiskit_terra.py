@@ -13,8 +13,8 @@ from qiskit.circuit.library import QuantumVolume
 
 class QiskitTranspilerBenchmarks:
     params = [0, 1, 2, 3]
-    param_names = ['transpiler optimization level']
-    version = '0.15.1'
+    param_names = ["transpiler optimization level"]
+    version = "0.15.1"
     timeout = 240
 
     def setup(self, _):
@@ -23,9 +23,17 @@ class QiskitTranspilerBenchmarks:
         self.circuit.measure_all()
 
     def time_transpile(self, level):
-        transpile(self.circuit, backend=self.backend, seed_transpiler=4242,
-                  optimization_level=level)
+        transpile(
+            self.circuit,
+            backend=self.backend,
+            seed_transpiler=4242,
+            optimization_level=level,
+        )
 
     def peakmem_transpile(self, level):
-        transpile(self.circuit, backend=self.backend, seed_transpiler=4242,
-                  optimization_level=level)
+        transpile(
+            self.circuit,
+            backend=self.backend,
+            seed_transpiler=4242,
+            optimization_level=level,
+        )

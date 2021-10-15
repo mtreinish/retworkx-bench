@@ -14,4 +14,4 @@ from subprocess import call
 
 class RetworkxImport:
     def time_retworkx_import(self):
-        call((executable, '-c', 'import retworkx'))
+        call((executable, "-c", "import retworkx"))

@@ -6,30 +6,22 @@
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
 
-import random
-import itertools
+import os
 
 import retworkx
+
+from .gr_parser import parse_gr_from_file
 
 
 class FloydWarshall:
 
-    params = ([10, 100, 1000],
-              [10, 100, 1000])
-    param_names = ['Number of Nodes', 'Number of Edges']
+    params = ([10, 100, 1000, 10000], [10, 100, 1000, 10000])
+    param_names = ["Number of Nodes", "Number of Edges"]
 
     def setup(self, num_nodes, num_edges):
-        random.seed(4242)
-        self.graph = retworkx.PyDAG()
-        nodes = []
-        for i in range(num_nodes):
-            nodes.append(self.graph.add_node(i))
-        random.shuffle(nodes)
-        node_ids = itertools.cycle(nodes)
-        for i in range(num_edges):
-            src = next(node_ids)
-            target = next(node_ids)
-            self.graph.add_edge(src, target, i)
+        self.graph = retworkx.directed_gnm_random_graph(
+            num_nodes, num_edges, seed=4242423
+        )
 
     def time_floyd_warshall(self, _, __):
         retworkx.floyd_warshall(self.graph)

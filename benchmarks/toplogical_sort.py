@@ -14,22 +14,25 @@ import retworkx
 
 class TopologicalSortBenchmarks:
 
-    params = ([10, 100, 1000, 10000, 100000, 1000000],
-              [10, 100, 1000, 10000, 100000, 1000000])
-    param_names = ['Number of Nodes', 'Number of Edges']
+    params = [10, 100, 1000, 10000, 100000, 1000000]
+    param_names = ["Number of Nodes"]
 
-    def setup(self, num_nodes, num_edges):
+    def setup(self, num_nodes):
         random.seed(42)
         self.graph = retworkx.PyDAG()
-        nodes = []
-        for i in range(num_nodes):
-            nodes.append(self.graph.add_node(i))
-        random.shuffle(nodes)
-        node_ids = itertools.cycle(nodes)
-        list_obj = []
-        for i in range(num_edges):
-            list_obj.append((next(node_ids), next(node_ids), i))
-        self.graph.add_edges_from(list_obj)
+        nodes = self.graph.add_nodes_from(list(range(num_nodes)))
+        node_iter = iter(nodes)
+        parents = [next(node_iter)]
+        count = 0
+        while parents:
+            source = parents.pop(0)
+            try:
+                target = next(nodes)
+                parents.append(target)
+                self.graph.add_edge(source, target, count)
+                count += 1
+            except StopIteration:
+                break
 
     def time_topological_sort(self, _, __):
         retworkx.topological_sort(self.graph)

@@ -16,8 +16,8 @@ from .metis_parser import parse_metis_from_file
 
 class GraphNodeCreation:
 
-    params = ([1, 10, 100, 1000, 10000, 100000, 1000000, 100000000])
-    param_names = ['Number of Nodes']
+    params = [1, 10, 100, 1000, 10000, 100000, 1000000, 100000000]
+    param_names = ["Number of Nodes"]
 
     def setup(self, num_nodes):
         self.empty_graph = retworkx.PyGraph()
@@ -33,9 +33,8 @@ class GraphNodeCreation:
 
 class DiGraphNodeCreation:
 
-    params = ([1, 10, 100, 1000, 10000, 100000, 1000000, 100000000],
-              [False, True])
-    param_names = ['Number of Nodes', 'Cycle Check']
+    params = ([1, 10, 100, 1000, 10000, 100000, 1000000, 100000000], [False, True])
+    param_names = ["Number of Nodes", "Cycle Check"]
 
     def setup(self, num_nodes, cycle_check):
         self.empty_digraph = retworkx.PyDAG(cycle_check)
@@ -50,9 +49,11 @@ class DiGraphNodeCreation:
 
 
 class GraphNodeAddition:
-    params = ([1, 10, 100, 1000, 10000, 100000, 1000000],
-              [1, 10, 100, 1000, 10000, 100000, 1000000])
-    param_names = ['Graph Size', 'Number of Nodes']
+    params = (
+        [1, 10, 100, 1000, 10000, 100000, 1000000],
+        [1, 10, 100, 1000, 10000, 100000, 1000000],
+    )
+    param_names = ["Graph Size", "Number of Nodes"]
 
     def setup(self, graph_size, num_nodes):
         self.full_graph = retworkx.PyGraph()
@@ -68,9 +69,11 @@ class GraphNodeAddition:
 
 
 class DiGraphNodeAddition:
-    params = ([1, 10, 100, 1000, 10000, 100000, 1000000],
-              [1, 10, 100, 1000, 10000, 100000, 1000000])
-    param_names = ['Graph Size', 'Number of Nodes']
+    params = (
+        [1, 10, 100, 1000, 10000, 100000, 1000000],
+        [1, 10, 100, 1000, 10000, 100000, 1000000],
+    )
+    param_names = ["Graph Size", "Number of Nodes"]
 
     def setup(self, graph_size, num_nodes):
         self.full_graph = retworkx.PyDAG()
@@ -87,12 +90,13 @@ class DiGraphNodeAddition:
 
 class RoadGraphFullUSA:
     timeout = 600
-    params = ([True, False])
+    params = [True, False]
     param_names = ["Directed Graph"]
 
     def setup(self, directed):
-        gr_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'graphs', "USA-road-t.USA.gr.gz")
+        gr_file = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "graphs", "USA-road-t.USA.gr.gz"
+        )
         self.graph = parse_gr_from_file(gr_file, directed=directed)
 
     def time___len__(self, _):
@@ -115,12 +119,13 @@ class RoadGraphFullUSA:
 
 
 class RoadGraphWesternUSA:
-    params = ([True, False])
+    params = [True, False]
     param_names = ["Directed Graph"]
 
     def setup(self, directed):
-        gr_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'graphs', "USA-road-t.W.gr.gz")
+        gr_file = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "graphs", "USA-road-t.W.gr.gz"
+        )
         self.graph = parse_gr_from_file(gr_file, directed=directed)
 
     def time___len__(self, _):
@@ -143,12 +148,13 @@ class RoadGraphWesternUSA:
 
 
 class USANYCRoadGraph:
-    params = ([True, False])
+    params = [True, False]
     param_names = ["Directed Graph"]
 
     def setup(self, directed):
-        gr_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'graphs', "USA-road-d.NY.gr")
+        gr_file = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "graphs", "USA-road-d.NY.gr"
+        )
         self.graph = parse_gr_from_file(gr_file, directed=directed)
 
     def time___len__(self, _):
@@ -171,10 +177,10 @@ class USANYCRoadGraph:
 
 
 class AsiaRoadGraph:
-
     def setup(self):
-        metis_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                  'graphs', "asia.osm.graph.bz2")
+        metis_file = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "graphs", "asia.osm.graph.bz2"
+        )
         self.graph = parse_metis_from_file(metis_file)
 
     def time___len__(self):
@@ -197,10 +203,12 @@ class AsiaRoadGraph:
 
 
 class RandomGeometricGraph:
-
     def setup(self):
-        metis_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                  'graphs', "rgg_n_2_22_s0.graph.bz2")
+        metis_file = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "graphs",
+            "rgg_n_2_22_s0.graph.bz2",
+        )
         self.graph = parse_metis_from_file(metis_file)
 
     def time___len__(self):
@@ -223,10 +231,12 @@ class RandomGeometricGraph:
 
 
 class TwoDimensionDynamicSimulation:
-
     def setup(self):
-        metis_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                  'graphs', "hugetric-00020.graph.bz2")
+        metis_file = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "graphs",
+            "hugetric-00020.graph.bz2",
+        )
         self.graph = parse_metis_from_file(metis_file)
 
     def time___len__(self):

@@ -18,9 +18,11 @@ from .metis_parser import parse_metis_from_file
 
 class PathFunctionBenchmarks:
 
-    params = ([10, 100, 1000, 10000, 100000, 1000000],
-              [10, 100, 1000, 10000, 100000, 1000000])
-    param_names = ['Number of Nodes', 'Number of Edges']
+    params = (
+        [10, 100, 1000, 10000, 100000, 1000000],
+        [10, 100, 1000, 10000, 100000, 1000000],
+    )
+    param_names = ["Number of Nodes", "Number of Edges"]
 
     def setup(self, num_nodes, num_edges):
         random.seed(42 * num_nodes)
@@ -34,9 +36,9 @@ class PathFunctionBenchmarks:
             src = next(node_ids)
             target = next(node_ids)
             self.graph.add_edge(src, target, i)
-        if hasattr(retworkx, 'dag_all_simple_paths'):
+        if hasattr(retworkx, "dag_all_simple_paths"):
             self.all_simple_paths_func = retworkx.dag_all_simple_paths
-        elif hasattr(retworkx, 'digraph_all_simple_paths'):
+        elif hasattr(retworkx, "digraph_all_simple_paths"):
             self.all_simple_paths_func = retworkx.digraph_all_simple_paths
         else:
             self.all_simple_paths_func = None
@@ -52,55 +54,46 @@ class PathFunctionBenchmarks:
 
 
 class TestAstar:
-    params = ([10],
-              [10, 100, 1000, 10000, 100000, 1000000])
-    param_names = ['Number of Nodes', 'Number of Edges']
+    params = ([10], [100, 1000, 10000, 100000, 1000000])
+    param_names = ["Number of Nodes", "Number of Edges"]
 
     def setup(self, num_nodes, num_edges):
-        if hasattr(retworkx, 'dag_astar_shortest_path'):
-            self.astar_func = retworkx.dag_astar_shortest_path
-        else:
-            self.astar_func = retworkx.digraph_astar_shortest_path
         random.seed(42)
-        self.graph = retworkx.PyDAG()
-        nodes = []
-        for i in range(num_nodes):
-            nodes.append(self.graph.add_node(i))
-        random.shuffle(nodes)
-        node_ids = itertools.cycle(nodes)
-        for i in range(num_edges):
-            src = next(node_ids)
-            target = next(node_ids)
-            self.graph.add_edge(src, target, i)
+        self.graph = retworkx.directed_gnm_random_graph(num_nodes, num_edges)
+        for x in self.graph.node_indexes():
+            self.graph[x] = x
+        for edge in self.graph.edge_indices():
+            self.graph.update_edge_by_index(edge, random.randint(1, 10000))
 
     def time_astar_shortest_path(self, num_nodes, __):
         def match_goal(x):
             return x == 1
 
-        self.astar_func(
-                self.graph, 0, match_goal, lambda x: x,
-                lambda x: 1)
+        retworkx.astar_shortest_path(
+            self.graph, 0, match_goal, float, lambda x: self.graph.out_degree(x)
+        )
 
 
 class PathsUSANYCRoadGraph:
-    params = ([True, False])
+    params = [True, False]
     param_names = ["Directed Graph"]
 
     def setup(self, directed):
-        gr_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'graphs', "USA-road-d.NY.gr")
+        gr_file = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "graphs", "USA-road-d.NY.gr"
+        )
         self.graph = parse_gr_from_file(gr_file, directed=directed)
         if directed:
-            if hasattr(retworkx, 'dag_all_simple_paths'):
+            if hasattr(retworkx, "dag_all_simple_paths"):
                 self.all_simple_paths_func = retworkx.dag_all_simple_paths
                 self.astar_func = retworkx.dag_astar_shortest_path
-            elif hasattr(retworkx, 'digraph_all_simple_paths'):
+            elif hasattr(retworkx, "digraph_all_simple_paths"):
                 self.all_simple_paths_func = retworkx.digraph_all_simple_paths
                 self.astar_func = retworkx.digraph_astar_shortest_path
             else:
                 raise NotImplementedError
         else:
-            if hasattr(retworkx, 'graph_all_simple_paths'):
+            if hasattr(retworkx, "graph_all_simple_paths"):
                 self.all_simple_paths_func = retworkx.graph_all_simple_paths
                 self.astar_func = retworkx.graph_astar_shortest_path
             else:
@@ -111,74 +104,64 @@ class PathsUSANYCRoadGraph:
         # too slow (for now) for a graph this large and takes over 10mins
         self.all_simple_paths_func(self.graph, 1, 0)
 
-    def time_astar_shortest_path(self, _):
+    def time_astar_shortest_path(self, directed):
         def match_goal(x):
             return x == 5123
 
-        self.astar_func(self.graph, 0, match_goal, lambda x: int(x),
-                        lambda x: 1)
+        if directed:
+            retworkx.astar_shortest_path(
+                self.graph, 0, match_goal, float, lambda x: self.graph.out_degree(x)
+            )
+        else:
+            retworkx.astar_shortest_path(
+                self.graph, 0, match_goal, float, lambda x: self.graph.degree(x)
+            )
 
 
 class PathsRoadGraphWesternUSA:
-    params = ([True, False])
+    params = [True, False]
     param_names = ["Directed Graph"]
 
     def setup(self, directed):
-        gr_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'graphs', "USA-road-t.W.gr.gz")
+        gr_file = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "graphs", "USA-road-t.W.gr.gz"
+        )
         self.graph = parse_gr_from_file(gr_file, directed=directed)
-        if directed:
-            if hasattr(retworkx, 'dag_all_simple_paths'):
-                self.all_simple_paths_func = retworkx.dag_all_simple_paths
-                self.astar_func = retworkx.dag_astar_shortest_path
-            elif hasattr(retworkx, 'digraph_all_simple_paths'):
-                self.all_simple_paths_func = retworkx.digraph_all_simple_paths
-                self.astar_func = retworkx.digraph_astar_shortest_path
-            else:
-                raise NotImplementedError
-        else:
-            if hasattr(retworkx, 'graph_all_simple_paths'):
-                self.all_simple_paths_func = retworkx.graph_all_simple_paths
-                self.astar_func = retworkx.graph_astar_shortest_path
-            else:
-                raise NotImplementedError
 
-    def time_astar_shortest_path(self, _):
+    def time_astar_shortest_path(self, directed):
         def match_goal(x):
             return x == 5123
 
-        self.astar_func(self.graph, 0, match_goal, lambda x: int(x),
-                        lambda x: 1)
+        if directed:
+            retworkx.astar_shortest_path(
+                self.graph, 0, match_goal, float, lambda x: self.graph.out_degree(x)
+            )
+        else:
+            retworkx.astar_shortest_path(
+                self.graph, 0, match_goal, float, lambda x: self.graph.degree(x)
+            )
 
 
 class PathsRoadGraphFullUSA:
     timeout = 600
-    params = ([True, False])
+    params = [True, False]
     param_names = ["Directed Graph"]
 
     def setup(self, directed):
-        gr_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'graphs', "USA-road-t.USA.gr.gz")
+        gr_file = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "graphs", "USA-road-t.USA.gr.gz"
+        )
         self.graph = parse_gr_from_file(gr_file, directed=directed)
-        if directed:
-            if hasattr(retworkx, 'dag_all_simple_paths'):
-                self.all_simple_paths_func = retworkx.dag_all_simple_paths
-                self.astar_func = retworkx.dag_astar_shortest_path
-            elif hasattr(retworkx, 'digraph_all_simple_paths'):
-                self.all_simple_paths_func = retworkx.digraph_all_simple_paths
-                self.astar_func = retworkx.digraph_astar_shortest_path
-            else:
-                raise NotImplementedError
-        else:
-            if hasattr(retworkx, 'graph_all_simple_paths'):
-                self.all_simple_paths_func = retworkx.graph_all_simple_paths
-                self.astar_func = retworkx.graph_astar_shortest_path
-            else:
-                raise NotImplementedError
 
-    def time_astar_shortest_path(self, _):
+    def time_astar_shortest_path(self, directed):
         def match_goal(x):
             return x == 5123
 
-        self.astar_func(self.graph, 0, match_goal, lambda x: int(x),
-                        lambda x: 1)
+        if directed:
+            retworkx.astar_shortest_path(
+                self.graph, 0, match_goal, float, lambda x: self.graph.out_degree(x)
+            )
+        else:
+            retworkx.astar_shortest_path(
+                self.graph, 0, match_goal, float, lambda x: self.graph.degree(x)
+            )

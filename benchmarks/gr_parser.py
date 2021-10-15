@@ -37,32 +37,32 @@ def parse_gr_from_file(path, directed=False):
         return_graph = retworkx.PyDAG()
 
     nodes_added = False
-    if path.endswith('gz'):
+    if path.endswith("gz"):
         open_call = gzip.open
     else:
         open_call = open
-    with open_call(path, 'rt') as fd:
+    with open_call(path, "rt") as fd:
         for line in fd:
-            if line.startswith('c'):
+            if line.startswith("c"):
                 continue
-            if line.startswith('p'):
-                num_nodes = int(line.split(' ')[2])
+            if line.startswith("p"):
+                num_nodes = int(line.split(" ")[2])
                 for i in range(num_nodes):
                     return_graph.add_node(i)
                 nodes_added = True
-            elif line.startswith('a'):
+            elif line.startswith("a"):
                 if not nodes_added:
                     raise Exception(
-                        "Invalid gr file, program line not first non-comment "
-                        "line.")
-                components = line.split(' ')
+                        "Invalid gr file, program line not first non-comment " "line."
+                    )
+                components = line.split(" ")
                 u = int(components[1]) - 1
                 v = int(components[2]) - 1
                 weight = components[3]
                 return_graph.add_edge(u, v, weight)
             else:
                 raise Exception(
-                    "Invalid gr file line: '%s' doesn't start with a valid "
-                    "token")
+                    "Invalid gr file line: '%s' doesn't start with a valid " "token"
+                )
 
     return return_graph

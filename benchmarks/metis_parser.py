@@ -47,15 +47,15 @@ def parse_metis_from_file(path):
     weight = 0
     ncon = 0
     count = 0
-    with bz2.open(path, 'rt') as fd:
+    with bz2.open(path, "rt") as fd:
         for line in fd:
             line = line.rstrip()
             if not line:
                 continue
-            if line.startswith('%'):
+            if line.startswith("%"):
                 continue
             if not props_set:
-                components = line.split(' ')
+                components = line.split(" ")
                 if len(components) >= 3:
                     weight = int(components[2])
                 if len(components) == 4:
@@ -68,7 +68,7 @@ def parse_metis_from_file(path):
                         return_graph.add_node(i)
                 props_set = True
             else:
-                raw_components = line.split(' ')
+                raw_components = line.split(" ")
                 if weight >= 10:
                     if ncon:
                         ncon_list = raw_components[:ncon]
@@ -77,8 +77,7 @@ def parse_metis_from_file(path):
                             for v, w in pairwise(raw_components[ncon:]):
                                 vertex = int(v) - 1
                                 weight = int(w)
-                                return_graph.add_edge(node_index, vertex,
-                                                      weight)
+                                return_graph.add_edge(node_index, vertex, weight)
                         else:
                             vertex_list = raw_components[:-ncon]
                             for v in vertex_list:
@@ -90,8 +89,7 @@ def parse_metis_from_file(path):
                             for v, w in pairwise(raw_components[1:]):
                                 vertex = int(v) - 1
                                 weight = int(w)
-                                return_graph.add_edge(node_index, vertex,
-                                                      weight)
+                                return_graph.add_edge(node_index, vertex, weight)
                         else:
                             for v in raw_components[1:]:
                                 vertex = int(v) - 1
